@@ -59,7 +59,7 @@ public class CooccurrenceController {
     @GetMapping("/version")
     public JsonNode getVersion() {
         ObjectNode responseNode = objectMapper.createObjectNode();
-        responseNode.put("version", "0.3.0");
+        responseNode.put("version", "0.3.1");
         return responseNode;
     }
 
