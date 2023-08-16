@@ -98,6 +98,17 @@ public class CooccurrenceController {
         return objectMapper.valueToTree(cacheSizes);
     }
 
+    @DeleteMapping("/cache")
+    public int deleteCache() {
+        for (String name : cacheManager.getCacheNames()) {
+            Cache cache = cacheManager.getCache(name);
+            if (cache != null) {
+                cache.clear();
+            }
+        }
+        return 200;
+    }
+
     @PostMapping("/query")
     public ResponseEntity<JsonNode> lookup(@RequestBody JsonNode requestNode) {
         long startTime = System.currentTimeMillis();
@@ -110,7 +121,7 @@ public class CooccurrenceController {
         JsonNode messageNode = requestNode.get("message");
         Validator validator = new Validator();
         Set<ValidationMessage> errors = validator.validateInput(messageNode.get("query_graph"));
-        if (errors.size() > 0) {
+        if (!errors.isEmpty()) {
             logger.warn("Lookup message failed validation");
             logger.debug(StringUtils.join(errors, "|"));
             return ResponseEntity.unprocessableEntity().body(objectMapper.convertValue(errors, ArrayNode.class));
@@ -132,7 +143,7 @@ public class CooccurrenceController {
         for (Map.Entry<String, QueryEdge> edgeEntry : queryGraph.getEdges().entrySet()) {
             unsupportedConstraints.addAll(edgeEntry.getValue().getAttributeConstraints().stream().filter(x -> !x.isSupported()).collect(Collectors.toList()));
         }
-        if (unsupportedConstraints.size() > 0) {
+        if (!unsupportedConstraints.isEmpty()) {
             ObjectNode errorNode = objectMapper.createObjectNode();
             errorNode.put("errorCode", "UnsupportedConstraint");
             errorNode.set("constraints", objectMapper.convertValue(unsupportedConstraints.stream().map(AttributeConstraint::getId).collect(Collectors.toList()), ArrayNode.class));
@@ -141,12 +152,13 @@ public class CooccurrenceController {
 
         logger.info(String.format("Starting lookup with %d edges and %d nodes", queryGraph.getEdges().size(), queryGraph.getNodes().size()));
         List<ConceptPair> initialPairs = getConceptPairs(queryGraph); // This is the actual query portion.
+        logger.info("Done with query portion; now processing the results");
         Map<String, QueryEdge> edgeMap = queryGraph.getEdges();
         List<ConceptPair> conceptPairs = new ArrayList<>();
         // Remove partial results that do not satisfy attribute constraints, if any
         for (ConceptPair pair : initialPairs) {
             QueryEdge edge = edgeMap.get(pair.getEdgeKey());
-            if (edge.getAttributeConstraints().size() > 0) {
+            if (!edge.getAttributeConstraints().isEmpty()) {
                 ConceptPair constrainedConceptPair = pair;
                 for (AttributeConstraint constraint : edge.getAttributeConstraints()) {
                     constrainedConceptPair = constrainedConceptPair.satisfyConstraint(constraint);
@@ -161,6 +173,7 @@ public class CooccurrenceController {
                 conceptPairs.add(pair);
             }
         }
+        logger.info("Normalizing nodes");
         List<String> curies = conceptPairs.stream()
                 .map(cp -> List.of(cp.getSubject(), cp.getObject()))
                 .flatMap(List::stream)
@@ -169,6 +182,7 @@ public class CooccurrenceController {
         Map<String, List<String>> categoryMap = lookupQueries.getCategoriesForCuries(curies);
         Map<String, String> labelMap = lookupQueries.getLabels(curies);
 
+        logger.info("Building KnowledgeGraph");
         KnowledgeGraph knowledgeGraph = buildKnowledgeGraph(conceptPairs, labelMap, categoryMap, normalizedNodes); // Equivalent to a fill operation.
         List<Result> resultsList = bindGraphs(queryGraph, knowledgeGraph); // Almost an atomic bind operation
 //        List<Result> completedResults = completeResults(resultsList); // Atomic complete_results operation
@@ -545,7 +559,7 @@ public class CooccurrenceController {
                     objectLabel = normalizedNodes.get(pair.getObject()).get("id").get("label").asText();
                 }
             }
-            if (subjectCategoryList.size() == 0) {
+            if (subjectCategoryList.isEmpty()) {
                 if (normalizedNodes.hasNonNull(pair.getSubject()) && normalizedNodes.get(pair.getSubject()).hasNonNull("type") &&
                         normalizedNodes.get(pair.getSubject()).get("type").isArray()) {
                     Iterator<JsonNode> cats = normalizedNodes.get(pair.getSubject()).get("type").elements();
@@ -566,7 +580,7 @@ public class CooccurrenceController {
                 }
                 subjectCategoryList.removeAll(removeList);
             }
-            if (objectCategoryList.size() == 0) {
+            if (objectCategoryList.isEmpty()) {
                 if (normalizedNodes.hasNonNull(pair.getObject()) && normalizedNodes.get(pair.getObject()).hasNonNull("type") &&
                         normalizedNodes.get(pair.getObject()).get("type").isArray()) {
                     Iterator<JsonNode> cats = normalizedNodes.get(pair.getObject()).get("type").elements();
@@ -644,6 +658,7 @@ public class CooccurrenceController {
                 List<ConceptPair> pairs = findConceptPairs(subjectNode.getIds(), subjectCategory, objectNode.getIds(), objectCategory);
                 pairs.forEach(x -> x.setKeys(subjectKey, objectKey, edgeKey));
                 conceptPairs.addAll(pairs);
+                logger.debug("Now actually done with building conceptPairs");
             }
         }
         return conceptPairs;
@@ -740,6 +755,8 @@ public class CooccurrenceController {
                 }
             }
         }
+        long t6 = System.currentTimeMillis();
+        logger.debug("Building conceptPairs completed in " + (t6 - t5) + "ms");
         return conceptPairs;
     }
 
@@ -759,7 +776,7 @@ public class CooccurrenceController {
             }
         }
         // If anything doesn't match in the synonym table we check Node Normalizer (because NN is apparently not symmetrical).
-        if (unmatchedQueryCuries.size() > 0) {
+        if (!unmatchedQueryCuries.isEmpty()) {
             logger.debug("Trying SRI NN");
             List<List<String>> newSynonymsList = new ArrayList<>();
             List<String> allTextMinedCuries = lookupQueries.getTextMinedCuries();
@@ -769,7 +786,7 @@ public class CooccurrenceController {
                 logger.debug("Trying for " + curie);
                 boolean foundInNN = false;
                 List<String> synonyms = sri.getNodeSynonyms(curie, nnJSON);
-                if (synonyms.size() > 0) {
+                if (!synonyms.isEmpty()) {
                     logger.debug("NN curie(s)");
                     logger.debug(String.join(",", synonyms));
                     for (String synonym : synonyms) {
