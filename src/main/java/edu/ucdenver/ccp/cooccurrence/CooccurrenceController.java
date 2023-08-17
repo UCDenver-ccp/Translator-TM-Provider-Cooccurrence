@@ -178,9 +178,17 @@ public class CooccurrenceController {
                 .map(cp -> List.of(cp.getSubject(), cp.getObject()))
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
-        JsonNode normalizedNodes = sri.getNormalizedNodesInBatches(curies, NN_BATCH_SIZE);
         Map<String, List<String>> categoryMap = lookupQueries.getCategoriesForCuries(curies);
         Map<String, String> labelMap = lookupQueries.getLabels(curies);
+        List<String> missingCuries = new ArrayList<>();
+        for (String curie : curies) {
+            if (!(categoryMap.containsKey(curie) && labelMap.containsKey(curie))) {
+                missingCuries.add(curie);
+            }
+        }
+        logger.debug(curies.size() + " ");
+        logger.debug(missingCuries.size() + " ");
+        JsonNode normalizedNodes = sri.getNormalizedNodesInBatches(missingCuries, NN_BATCH_SIZE);
 
         logger.info("Building KnowledgeGraph");
         KnowledgeGraph knowledgeGraph = buildKnowledgeGraph(conceptPairs, labelMap, categoryMap, normalizedNodes); // Equivalent to a fill operation.
