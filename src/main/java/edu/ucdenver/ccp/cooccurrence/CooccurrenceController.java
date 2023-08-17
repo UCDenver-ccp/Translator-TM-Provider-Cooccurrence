@@ -98,17 +98,6 @@ public class CooccurrenceController {
         return objectMapper.valueToTree(cacheSizes);
     }
 
-    @DeleteMapping("/cache")
-    public int deleteCache() {
-        for (String name : cacheManager.getCacheNames()) {
-            Cache cache = cacheManager.getCache(name);
-            if (cache != null) {
-                cache.clear();
-            }
-        }
-        return 200;
-    }
-
     @PostMapping("/query")
     public ResponseEntity<JsonNode> lookup(@RequestBody JsonNode requestNode) {
         long startTime = System.currentTimeMillis();
