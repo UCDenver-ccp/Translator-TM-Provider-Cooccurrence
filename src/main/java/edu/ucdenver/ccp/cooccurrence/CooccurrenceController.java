@@ -177,6 +177,7 @@ public class CooccurrenceController {
         List<String> curies = conceptPairs.stream()
                 .map(cp -> List.of(cp.getSubject(), cp.getObject()))
                 .flatMap(List::stream)
+                .distinct()
                 .collect(Collectors.toList());
         Map<String, List<String>> categoryMap = lookupQueries.getCategoriesForCuries(curies);
         Map<String, String> labelMap = lookupQueries.getLabels(curies);
