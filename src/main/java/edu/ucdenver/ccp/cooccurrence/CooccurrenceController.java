@@ -56,6 +56,11 @@ public class CooccurrenceController {
 
     // region: Endpoints
 
+    @GetMapping("/loaderio-8e6ee531bccafc045eff2564d8c2b314/")
+    public String getToken() {
+        return "loaderio-8e6ee531bccafc045eff2564d8c2b314";
+    }
+
     @GetMapping("/version")
     public JsonNode getVersion() {
         ObjectNode responseNode = objectMapper.createObjectNode();
