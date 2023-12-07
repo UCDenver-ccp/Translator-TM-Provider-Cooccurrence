@@ -8,7 +8,7 @@ COPY opentelemetry-javaagent.jar opentelemetry-javaagent.jar
 COPY --from=build /home/app/target/*.jar app.jar
 
 ENV JAVA_TOOL_OPTIONS=-javaagent:opentelemetry-javaagent.jar
-ENV OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger-otel-agent.sri:6831
+ENV OTEL_EXPORTER_OTLP_ENDPOINT=http://collector.text-mining-kp.org:4317
 ENV OTEL_METRICS_EXPORTER=none
 ENV OTEL_SERVICE_NAME=text-mining-provider-cooccurrence
 
