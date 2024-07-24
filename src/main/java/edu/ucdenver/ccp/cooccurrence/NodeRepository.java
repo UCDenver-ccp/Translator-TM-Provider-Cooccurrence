@@ -1,15 +1,16 @@
 package edu.ucdenver.ccp.cooccurrence;
 
-import edu.ucdenver.ccp.cooccurrence.entities.EdgeMetadata;
-import edu.ucdenver.ccp.cooccurrence.entities.Node;
-import edu.ucdenver.ccp.cooccurrence.entities.NodeMetadata;
+import java.util.List;
+
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import edu.ucdenver.ccp.cooccurrence.entities.EdgeMetadata;
+import edu.ucdenver.ccp.cooccurrence.entities.Node;
+import edu.ucdenver.ccp.cooccurrence.entities.NodeMetadata;
 
 
 public interface NodeRepository extends Repository<Node, Integer> {

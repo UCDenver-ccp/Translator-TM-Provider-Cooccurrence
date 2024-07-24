@@ -1,13 +1,20 @@
 package edu.ucdenver.ccp.cooccurrence;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.*;
-import java.math.BigInteger;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Repository
 public class LookupRepository {

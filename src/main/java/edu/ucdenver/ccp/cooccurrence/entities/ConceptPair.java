@@ -1,16 +1,17 @@
 package edu.ucdenver.ccp.cooccurrence.entities;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import edu.ucdenver.ccp.cooccurrence.TRAPI.Attribute;
-import edu.ucdenver.ccp.cooccurrence.TRAPI.AttributeConstraint;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import edu.ucdenver.ccp.cooccurrence.TRAPI.Attribute;
+import edu.ucdenver.ccp.cooccurrence.TRAPI.AttributeConstraint;
 
 public class ConceptPair {
 

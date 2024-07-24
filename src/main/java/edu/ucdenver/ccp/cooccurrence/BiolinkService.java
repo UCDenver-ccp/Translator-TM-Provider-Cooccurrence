@@ -1,12 +1,5 @@
 package edu.ucdenver.ccp.cooccurrence;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.lang.Nullable;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -14,6 +7,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.lang.Nullable;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
 public class BiolinkService {
     private static final String BIOLINK_URI = "https://raw.githubusercontent.com/biolink/biolink-model/master/biolink-model.yaml";

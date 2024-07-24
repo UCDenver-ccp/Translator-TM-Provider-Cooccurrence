@@ -1,16 +1,20 @@
 package edu.ucdenver.ccp.cooccurrence.TRAPI;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-import com.networknt.schema.*;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.HashSet;
-import java.util.Set;
+import com.networknt.schema.CustomErrorMessageType;
+import com.networknt.schema.JsonSchema;
+import com.networknt.schema.JsonSchemaFactory;
+import com.networknt.schema.SpecVersion;
+import com.networknt.schema.ValidationMessage;
 
 public class Validator {
 

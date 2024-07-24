@@ -1,10 +1,10 @@
 package edu.ucdenver.ccp.cooccurrence.TRAPI;
 
+import java.util.List;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import java.util.List;
 
 public class AttributeConstraint {
 

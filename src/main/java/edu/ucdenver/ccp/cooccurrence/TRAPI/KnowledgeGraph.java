@@ -1,13 +1,14 @@
 package edu.ucdenver.ccp.cooccurrence.TRAPI;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class KnowledgeGraph {
     private Map<String, KnowledgeNode> nodes;

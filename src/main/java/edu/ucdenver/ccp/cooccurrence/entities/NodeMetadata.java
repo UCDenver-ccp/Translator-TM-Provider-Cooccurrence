@@ -1,11 +1,12 @@
 package edu.ucdenver.ccp.cooccurrence.entities;
 
+import java.io.Serializable;
+import java.util.Objects;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
-import java.io.Serializable;
-import java.util.Objects;
 
 @Entity
 @IdClass(NodeMetadataPK.class)

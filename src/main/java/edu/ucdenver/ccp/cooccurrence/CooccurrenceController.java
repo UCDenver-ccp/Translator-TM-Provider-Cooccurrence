@@ -1,13 +1,19 @@
 package edu.ucdenver.ccp.cooccurrence;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.networknt.schema.ValidationMessage;
-import edu.ucdenver.ccp.cooccurrence.TRAPI.*;
-import edu.ucdenver.ccp.cooccurrence.entities.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,11 +21,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentMap;
-import java.util.stream.Collectors;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.networknt.schema.ValidationMessage;
+
+import edu.ucdenver.ccp.cooccurrence.TRAPI.Analysis;
+import edu.ucdenver.ccp.cooccurrence.TRAPI.Attribute;
+import edu.ucdenver.ccp.cooccurrence.TRAPI.AttributeConstraint;
+import edu.ucdenver.ccp.cooccurrence.TRAPI.EdgeBinding;
+import edu.ucdenver.ccp.cooccurrence.TRAPI.KnowledgeEdge;
+import edu.ucdenver.ccp.cooccurrence.TRAPI.KnowledgeGraph;
+import edu.ucdenver.ccp.cooccurrence.TRAPI.KnowledgeNode;
+import edu.ucdenver.ccp.cooccurrence.TRAPI.NodeBinding;
+import edu.ucdenver.ccp.cooccurrence.TRAPI.QueryEdge;
+import edu.ucdenver.ccp.cooccurrence.TRAPI.QueryGraph;
+import edu.ucdenver.ccp.cooccurrence.TRAPI.QueryNode;
+import edu.ucdenver.ccp.cooccurrence.TRAPI.Result;
+import edu.ucdenver.ccp.cooccurrence.TRAPI.RetrievalSource;
+import edu.ucdenver.ccp.cooccurrence.TRAPI.Validator;
+import edu.ucdenver.ccp.cooccurrence.entities.ConceptPair;
+import edu.ucdenver.ccp.cooccurrence.entities.EdgeMetadata;
+import edu.ucdenver.ccp.cooccurrence.entities.Metrics;
+import edu.ucdenver.ccp.cooccurrence.entities.NodeMetadata;
 
 @RestController
 public class CooccurrenceController {
