@@ -123,13 +123,18 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
+							<generateApis>false</generateApis>
+							<generateSupportingFiles>false</generateSupportingFiles>
 							<inputSpec>
 								${project.basedir}/text-mining-provider-cooccurrence.yaml</inputSpec>
 							<generatorName>spring</generatorName>
-							<apiPackage>org.ncats.trapi.api</apiPackage>
+							<!--<apiPackage>org.ncats.trapi.api</apiPackage>-->
 							<modelPackage>org.ncats.trapi.model</modelPackage>
+
 							<configOptions>
 								<sourceFolder>src/gen/java/main</sourceFolder>
+
+								<!--<delegatePattern>true</delegatePattern>-->
 							</configOptions>
 						</configuration>
 					</execution>
