@@ -1,0 +1,17 @@
+steps:
+    # ########################################################### #
+    # Build & push to container registry - Cooccurrence Container #
+    # ########################################################### #
+    - id: 'build cooccurrence service container'
+      name: 'gcr.io/cloud-builders/docker'
+      args: [ 'build', '-t', 'gcr.io/$PROJECT_ID/cooccurrence:${_VERSION}', '-f', 'Dockerfile', '.' ]
+      timeout: 3600s
+      waitFor: ['-'] # start immediately
+    
+    - id: 'push cooccurrence service container'
+      name: 'gcr.io/cloud-builders/docker'
+      args: ['push', 'gcr.io/$PROJECT_ID/cooccurrence:${_VERSION}']
+      waitFor: ['build cooccurrence service container']
+
+substitutions:  
+    _VERSION: '0.1'
