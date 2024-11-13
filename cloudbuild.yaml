@@ -13,5 +13,6 @@ steps:
       args: ['push', 'gcr.io/$PROJECT_ID/cooccurrence:${_VERSION}']
       waitFor: ['build cooccurrence service container']
 
+# v0.2 - updated for TRAPI 1.5 compliance
 substitutions:  
-    _VERSION: '0.1'
+    _VERSION: '0.2'
