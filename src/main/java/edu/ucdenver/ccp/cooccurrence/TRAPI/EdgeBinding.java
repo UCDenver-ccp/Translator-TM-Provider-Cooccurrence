@@ -46,13 +46,13 @@ public class EdgeBinding {
         ObjectMapper om = new ObjectMapper();
         ObjectNode edge = om.createObjectNode();
         edge.put("id", this.id);
-        if (this.attributes.size() > 0) {
+//        if (this.attributes.size() > 0) {
             ArrayNode attributesNode = om.createArrayNode();
             for (Attribute attribute : this.attributes) {
                 attributesNode.add(attribute.toJSON());
             }
             edge.set("attributes", attributesNode);
-        }
+//        }
         for (Map.Entry<String, JsonNode> kv : this.additionalProperties.entrySet()) {
             edge.set(kv.getKey(), kv.getValue());
         }

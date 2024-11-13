@@ -59,13 +59,13 @@ public class NodeBinding {
         if (this.queryId.length() > 0) {
             node.put("query_id", this.queryId);
         }
-        if (this.attributes.size() > 0) {
+//        if (this.attributes.size() > 0) {
             ArrayNode attributesNode = om.createArrayNode();
             for (Attribute attribute : this.attributes) {
                 attributesNode.add(attribute.toJSON());
             }
             node.set("attributes", attributesNode);
-        }
+//        }
         for (Map.Entry<String, JsonNode> kv : this.additionalProperties.entrySet()) {
             node.set(kv.getKey(), kv.getValue());
         }
