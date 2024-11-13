@@ -59,7 +59,7 @@ public class CooccurrenceController {
     @GetMapping("/version")
     public JsonNode getVersion() {
         ObjectNode responseNode = objectMapper.createObjectNode();
-        responseNode.put("version", "0.3.3");
+        responseNode.put("version", "0.3.4");
         return responseNode;
     }
 
@@ -193,6 +193,8 @@ public class CooccurrenceController {
         responseMessageNode.set("results", objectMapper.convertValue(jsonResults, ArrayNode.class));
         logger.info("Lookup completed in " + (System.currentTimeMillis() - startTime) + "ms");
         ObjectNode responseNode = objectMapper.createObjectNode();
+        responseNode.put("schema_version", "1.5.0");
+        responseNode.put("biolink_version", "4.2.2");
         responseNode.set("message", responseMessageNode);
         for (Map.Entry<String, JsonNode> attribute : otherAttributes.entrySet()) {
             responseNode.set(attribute.getKey(), attribute.getValue());
@@ -288,7 +290,13 @@ public class CooccurrenceController {
             entry.put("subject", em.getSubject());
             entry.put("object", em.getObject());
             entry.put("predicate", em.getPredicate());
-            entry.set("knowledge_types", objectMapper.nullNode());
+            
+            ArrayNode knowledgeTypesArray = objectMapper.createArrayNode();
+            knowledgeTypesArray.add("lookup");
+            entry.set("knowledge_types", knowledgeTypesArray);
+//            entry.set("knowledge_types", objectMapper.nullNode());
+            
+            
             entry.set("attributes", edgeMetaAttributeArray);
             entry.set("qualifiers", objectMapper.nullNode());
             edgeMetadataArray.add(entry);
@@ -599,7 +607,23 @@ public class CooccurrenceController {
                 }
                 objectCategoryList.removeAll(removeList);
             }
+            
+            
+            
             KnowledgeEdge edge = new KnowledgeEdge(pair.getSubject(), pair.getObject(), "biolink:occurs_together_in_literature_with", attributeList);
+            
+            // Add KL/AT attributes to each edge
+    		Attribute knowledgeLevelAttribute = new Attribute();
+            knowledgeLevelAttribute.setAttributeTypeId("biolink:knowledge_level");
+            knowledgeLevelAttribute.setValue("not_provided");
+            
+            Attribute agentTypeAttribute = new Attribute();
+            agentTypeAttribute.setAttributeTypeId("biolink:agent_type");
+            agentTypeAttribute.setValue("text_mining_agent");
+            
+            edge.addAttribute(knowledgeLevelAttribute);
+            edge.addAttribute(agentTypeAttribute);
+            
             KnowledgeNode subjectNode = new KnowledgeNode(subjectLabel, subjectCategoryList);
             KnowledgeNode objectNode = new KnowledgeNode(objectLabel, objectCategoryList);
 

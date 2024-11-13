@@ -75,13 +75,13 @@ public class KnowledgeNode {
         if (this.categories.size() > 0) {
             nodeNode.set("categories", om.convertValue(this.categories, ArrayNode.class));
         }
-        if (this.attributes.size() > 0) {
+//        if (this.attributes.size() > 0) {
             ArrayNode attributesNode = om.createArrayNode();
             for (Attribute attribute : this.attributes) {
                 attributesNode.add(attribute.toJSON());
             }
             nodeNode.set("attributes", attributesNode);
-        }
+//        }
         return nodeNode;
     }
 
