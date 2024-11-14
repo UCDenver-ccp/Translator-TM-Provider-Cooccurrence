@@ -36,12 +36,13 @@ servers:
   - description: ITRB CI server
     url: https://cooccurrence.ci.transltr.io
     x-maturity: staging
-  - description: ITRB Test server
-    url: https://cooccurrence.test.transltr.io
-    x-maturity: testing
-  - description: ITRB Prod server
-    url: https://cooccurrence.transltr.io
-    x-maturity: production
+  # TEST and PROD are not yet at TRAPI 1.5, hence they are commented out
+  # - description: ITRB Test server
+  #   url: https://cooccurrence.test.transltr.io
+  #   x-maturity: testing
+  # - description: ITRB Prod server
+  #   url: https://cooccurrence.transltr.io
+  #   x-maturity: production
 tags:
 - name: meta_knowledge_graph
   description: >-
