@@ -14,5 +14,6 @@ steps:
       waitFor: ['build cooccurrence service container']
 
 # v0.2 - updated for TRAPI 1.5 compliance
+# v0.2.1 - reverted the name of the openapi.yaml file
 substitutions:  
-    _VERSION: '0.2'
+    _VERSION: '0.2.1'
